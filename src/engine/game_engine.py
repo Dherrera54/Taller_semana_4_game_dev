@@ -1,3 +1,4 @@
+from src.ecs.systems.s_mine_reloader import system_mine_reloader
 from src.ecs.systems.s_detonate_mine import system_detonate_mine
 from src.ecs.systems.s_collision_enemy_special import system_collision_enemy_special
 from src.ecs.systems.s_pause import system_pause
@@ -53,6 +54,7 @@ class GameEngine:
         self.ecs_world = esper.World()
 
         self.num_bullets = 0
+        self.num_mines = 0
 
     def _load_config_files(self):
         with open("assets/cfg/window.json", encoding="utf-8") as window_file:
@@ -105,6 +107,8 @@ class GameEngine:
         system_enemy_spawner(self.ecs_world, self.enemies_cfg, self.delta_time)
         system_detonate_mine(self.ecs_world,self._player_c_s.area.size, self.player_cfg["special"]["mine_frag"], 
                                 self.delta_time, self.explosion_cfg)
+        self.num_mines = system_mine_reloader(self.ecs_world, self.screen, self.num_mines, self.delta_time,
+                                self.level_01_cfg["player_spawn"]["max_grenades"], self.level_01_cfg["level_text"]["generic_msg"] )
         system_movement(self.ecs_world, self.delta_time)
 
         system_screen_bounce(self.ecs_world, self.screen)
@@ -163,9 +167,9 @@ class GameEngine:
         if c_input.name == "PLAYER_FIRE" and self.num_bullets < self.level_01_cfg["player_spawn"]["max_bullets"]:
             create_bullet(self.ecs_world, c_input.mouse_pos, self._player_c_t.pos,
                           self._player_c_s.area.size, self.bullet_cfg)
-        if c_input.name == "PLAYER_SPECIAL" :
-            create_mine(self.ecs_world, self._player_c_t.pos,
-                          self._player_c_s.area.size, self.player_cfg["special"]["mine"])
+        if c_input.name == "PLAYER_SPECIAL" and self.num_mines < self.level_01_cfg["player_spawn"]["max_grenades"]:
+            self.num_mines = create_mine(self.ecs_world, self._player_c_t.pos,
+                          self._player_c_s.area.size, self.player_cfg["special"]["mine"], self.num_mines )
             
 
 

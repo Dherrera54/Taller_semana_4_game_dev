@@ -165,6 +165,20 @@
                 "x":100,
                 "y":125
             }
+        },
+        "generic_msg":{
+            "text": "place holder",
+            "font":"assets/fnt/PressStart2P2.ttf",
+            "size":8,
+            "color":{
+                "r":255,
+                "g":255,
+                "b":255
+            },
+            "pos":{
+                "x":100,
+                "y":125
+            }
         }
         
         

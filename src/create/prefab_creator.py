@@ -1,3 +1,4 @@
+from src.ecs.components.c_mine_reloader import CMineReloader
 from src.engine.service_locator import ServiceLocator
 import random
 import pygame
@@ -158,11 +159,12 @@ def create_screen_message(screen:pygame.Surface, text_info:dict):
 def create_mine(world: esper.World,
                   player_pos: pygame.Vector2,
                   player_size: pygame.Vector2,
-                  shield_info: dict):
-    mine_sprite = ServiceLocator.images_services.get(shield_info["image"])
+                  mine_info: dict,
+                  num_mines:int):
+    mine_sprite = ServiceLocator.images_services.get(mine_info["image"])
    
     size = mine_sprite.get_size()
-    size = (size[0] / shield_info["animations"]["number_frames"], size[1])
+    size = (size[0] / mine_info["animations"]["number_frames"], size[1])
     
     pos = pygame.Vector2(player_pos.x + (player_size[0] / 2) - (size[0] / 2),
                          player_pos.y + (player_size[1] / 2) - (size[1] / 2)) 
@@ -171,8 +173,11 @@ def create_mine(world: esper.World,
 
     shield_entity = create_sprite(world, pos, vel, mine_sprite)
     world.add_component(shield_entity,
-                        CAnimation(shield_info["animations"]))
+                        CAnimation(mine_info["animations"]))
     world.add_component(shield_entity, CTagSpecial("mine", pos))
+    num_mines+=1
+    return num_mines
+
 
 def create_mine_frag(world: esper.World,
                   mine_pos: pygame.Vector2,
@@ -186,6 +191,11 @@ def create_mine_frag(world: esper.World,
 
     bullet_entity = create_sprite(world, pos, vel, frag_surface)
     world.add_component(bullet_entity, CTagSpecial("mine_frag",mine_pos ))
+
+def create_mine_reloader(world: esper.World):
+    reloader_entity = world.create_entity()
+    world.add_component(reloader_entity,
+                        CMineReloader())
     
 
     
