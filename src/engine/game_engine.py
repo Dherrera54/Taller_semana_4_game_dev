@@ -1,3 +1,5 @@
+from src.ecs.systems.s_detonate_mine import system_detonate_mine
+from src.ecs.systems.s_collision_enemy_special import system_collision_enemy_special
 from src.ecs.systems.s_pause import system_pause
 import asyncio
 import json
@@ -27,7 +29,7 @@ from src.ecs.components.tags.c_tag_bullet import CTagBullet
 
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 
-from src.create.prefab_creator import create_enemy_spawner, create_input_player, create_player_square, create_bullet, create_special
+from src.create.prefab_creator import create_enemy_spawner, create_input_player, create_player_square, create_bullet, create_mine
 
 
 class GameEngine:
@@ -101,6 +103,8 @@ class GameEngine:
 
     def _update(self):
         system_enemy_spawner(self.ecs_world, self.enemies_cfg, self.delta_time)
+        system_detonate_mine(self.ecs_world,self._player_c_s.area.size, self.player_cfg["special"]["mine_frag"], 
+                                self.delta_time, self.explosion_cfg)
         system_movement(self.ecs_world, self.delta_time)
 
         system_screen_bounce(self.ecs_world, self.screen)
@@ -108,6 +112,7 @@ class GameEngine:
         system_screen_bullet(self.ecs_world, self.screen)
 
         system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg)
+        system_collision_enemy_special(self.ecs_world, self.explosion_cfg)
         system_collision_player_enemy(self.ecs_world, self._player_entity,
                                       self.level_01_cfg, self.explosion_cfg)
 
@@ -159,8 +164,9 @@ class GameEngine:
             create_bullet(self.ecs_world, c_input.mouse_pos, self._player_c_t.pos,
                           self._player_c_s.area.size, self.bullet_cfg)
         if c_input.name == "PLAYER_SPECIAL" :
-            create_special(self.ecs_world, self._player_c_t.pos,
-                          self._player_c_s.area.size, self.player_cfg["shield"])
+            create_mine(self.ecs_world, self._player_c_t.pos,
+                          self._player_c_s.area.size, self.player_cfg["special"]["mine"])
+            
 
 
                        

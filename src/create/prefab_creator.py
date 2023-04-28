@@ -155,13 +155,13 @@ def create_screen_message(screen:pygame.Surface, text_info:dict):
 
     screen.blit(title_surface, (text_info["pos"]["x"],text_info["pos"]["y"]))
 
-def create_special(world: esper.World,
+def create_mine(world: esper.World,
                   player_pos: pygame.Vector2,
                   player_size: pygame.Vector2,
                   shield_info: dict):
-    bullet_surface = ServiceLocator.images_services.get(shield_info["image"])
+    mine_sprite = ServiceLocator.images_services.get(shield_info["image"])
    
-    size = bullet_surface.get_size()
+    size = mine_sprite.get_size()
     size = (size[0] / shield_info["animations"]["number_frames"], size[1])
     
     pos = pygame.Vector2(player_pos.x + (player_size[0] / 2) - (size[0] / 2),
@@ -169,10 +169,23 @@ def create_special(world: esper.World,
    
     vel = pygame.Vector2(0,0)
 
-    shield_entity = create_sprite(world, pos, vel, bullet_surface)
+    shield_entity = create_sprite(world, pos, vel, mine_sprite)
     world.add_component(shield_entity,
                         CAnimation(shield_info["animations"]))
-    world.add_component(shield_entity, CTagSpecial())
+    world.add_component(shield_entity, CTagSpecial("mine", pos))
+
+def create_mine_frag(world: esper.World,
+                  mine_pos: pygame.Vector2,
+                  player_size: pygame.Vector2,
+                  vel: pygame.Vector2,
+                  frag_info: dict):
+    frag_surface = ServiceLocator.images_services.get(frag_info["image"])
+    frag_size = frag_surface.get_rect().size
+    pos = pygame.Vector2(mine_pos.x + (player_size[0] / 2) - (frag_size[0] / 2),
+                         mine_pos.y + (player_size[1] / 2) - (frag_size[1] / 2)) 
+
+    bullet_entity = create_sprite(world, pos, vel, frag_surface)
+    world.add_component(bullet_entity, CTagSpecial("mine_frag",mine_pos ))
     
 
     
