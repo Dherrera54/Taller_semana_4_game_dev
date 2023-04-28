@@ -103,5 +103,69 @@
                 "y": 260
             }
         }
-    ]
+    ],
+    
+    "level_text":{
+        "title":{
+            "text":"Ejercicio 04",
+            "font":"assets/fnt/PressStart2P.ttf",
+            "size":16,
+            "color":{
+                "r":255,
+                "g":255,
+                "b":255
+            },
+            "pos":{
+                "x":25,
+                "y":25
+            }
+
+        },
+        "controls":{
+            "text": "Controles: flechas para movimiento y click para disparar",
+            "font":"assets/fnt/PressStart2P2.ttf",
+            "size":8,
+            "color":{
+                "r":255,
+                "g":255,
+                "b":0
+            },
+            "pos":{
+                "x":25,
+                "y":50
+            }
+        },
+        
+        "paused":{
+            "text": "Pausado",
+            "font":"assets/fnt/PressStart2P.ttf",
+            "size":16,
+            "color":{
+                "r":255,
+                "g":255,
+                "b":0
+            },
+            "pos":{
+                "x":100,
+                "y":100
+            }
+        },
+        "paused_msg":{
+            "text": "pulsa P para continuar",
+            "font":"assets/fnt/PressStart2P2.ttf",
+            "size":8,
+            "color":{
+                "r":255,
+                "g":255,
+                "b":255
+            },
+            "pos":{
+                "x":100,
+                "y":125
+            }
+        }
+        
+        
+        
+    }
 }

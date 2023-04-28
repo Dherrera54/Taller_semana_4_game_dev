@@ -1,3 +1,4 @@
+from src.ecs.systems.s_pause import system_pause
 import asyncio
 import json
 import pygame
@@ -26,7 +27,7 @@ from src.ecs.components.tags.c_tag_bullet import CTagBullet
 
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 
-from src.create.prefab_creator import create_enemy_spawner, create_input_player, create_player_square, create_bullet
+from src.create.prefab_creator import create_enemy_spawner, create_input_player, create_player_square, create_bullet, create_special
 
 
 class GameEngine:
@@ -43,6 +44,7 @@ class GameEngine:
         self.is_running = False
         self.framerate = self.window_cfg["framerate"]
         self.delta_time = 0
+        self.paused = False
         self.bg_color = pygame.Color(self.window_cfg["bg_color"]["r"],
                                      self.window_cfg["bg_color"]["g"],
                                      self.window_cfg["bg_color"]["b"])
@@ -87,12 +89,15 @@ class GameEngine:
     def _calculate_time(self):
         self.clock.tick(self.framerate)
         self.delta_time = self.clock.get_time() / 1000.0
+        if self.delta_time > 1/30:
+         self.delta_time= 1/30
 
     def _process_events(self):
         for event in pygame.event.get():
             system_input_player(self.ecs_world, event, self._do_action)
             if event.type == pygame.QUIT:
                 self.is_running = False
+            
 
     def _update(self):
         system_enemy_spawner(self.ecs_world, self.enemies_cfg, self.delta_time)
@@ -118,7 +123,7 @@ class GameEngine:
 
     def _draw(self):
         self.screen.fill(self.bg_color)
-        system_rendering(self.ecs_world, self.screen)
+        system_rendering(self.ecs_world, self.screen, self.level_01_cfg["level_text"])
         pygame.display.flip()
 
     def _clean(self):
@@ -146,7 +151,16 @@ class GameEngine:
                 self._player_c_v.vel.y += self.player_cfg["input_velocity"]
             elif c_input.phase == CommandPhase.END:
                 self._player_c_v.vel.y -= self.player_cfg["input_velocity"]
+        if c_input.name == "GAME_PAUSE":
+            if c_input.phase == CommandPhase.START:
+                system_pause(self.level_01_cfg["level_text"], self.screen)
 
         if c_input.name == "PLAYER_FIRE" and self.num_bullets < self.level_01_cfg["player_spawn"]["max_bullets"]:
             create_bullet(self.ecs_world, c_input.mouse_pos, self._player_c_t.pos,
                           self._player_c_s.area.size, self.bullet_cfg)
+        if c_input.name == "PLAYER_SPECIAL" :
+            create_special(self.ecs_world, self._player_c_t.pos,
+                          self._player_c_s.area.size, self.player_cfg["shield"])
+
+
+                       

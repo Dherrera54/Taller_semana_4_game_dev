@@ -17,5 +17,19 @@
             }
         ]
     },
-    "input_velocity": 100
+    "input_velocity": 100,
+    "shield":{
+        "image": "assets/img/shield.png",
+        "animations": {
+            "number_frames": 4,
+            "list": [
+                {
+                    "name": "MOVE",
+                    "start": 0,
+                    "end": 3,
+                    "framerate": 24
+                }
+            ]
+        }
+    }
 }

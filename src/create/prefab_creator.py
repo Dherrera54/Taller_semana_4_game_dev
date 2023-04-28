@@ -12,6 +12,7 @@ from src.ecs.components.tags.c_tag_enemy import CTagEnemy
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_bullet import CTagBullet
 from src.ecs.components.tags.c_tag_explosion import CTagExplosion
+from src.ecs.components.tags.c_tag_special import CTagSpecial
 from src.ecs.components.c_animation import CAnimation
 from src.ecs.components.c_player_state import CPlayerState
 from src.ecs.components.c_enemy_hunter_state import CEnemyHunterState
@@ -50,7 +51,8 @@ def create_enemy_square(world: esper.World, pos: pygame.Vector2, enemy_info: dic
                               random.choice([-vel_range, vel_range]))
     enemy_entity = create_sprite(world, pos, velocity, enemy_surface)
     world.add_component(enemy_entity, CTagEnemy("Bouncer"))
-    ServiceLocator.sounds_service.play(enemy_info["sound"])
+    #########____________________###########
+    #ServiceLocator.sounds_service.play(enemy_info["sound"])
 
 
 def create_enemy_hunter(world: esper.World, pos: pygame.Vector2, enemy_info: dict):
@@ -89,6 +91,9 @@ def create_input_player(world: esper.World):
     input_right = world.create_entity()
     input_up = world.create_entity()
     input_down = world.create_entity()
+    input_pause = world.create_entity()
+    input_fire = world.create_entity()
+    input_special = world.create_entity()
 
     world.add_component(input_left,
                         CInputCommand("PLAYER_LEFT", pygame.K_LEFT))
@@ -99,9 +104,13 @@ def create_input_player(world: esper.World):
     world.add_component(input_down,
                         CInputCommand("PLAYER_DOWN", pygame.K_DOWN))
 
-    input_fire = world.create_entity()
     world.add_component(input_fire,
                         CInputCommand("PLAYER_FIRE", pygame.BUTTON_LEFT))
+    world.add_component(input_special,
+                        CInputCommand("PLAYER_SPECIAL", pygame.BUTTON_RIGHT))
+    
+    world.add_component(input_pause,
+                        CInputCommand("GAME_PAUSE", pygame.K_p))
 
 
 def create_bullet(world: esper.World,
@@ -118,7 +127,8 @@ def create_bullet(world: esper.World,
 
     bullet_entity = create_sprite(world, pos, vel, bullet_surface)
     world.add_component(bullet_entity, CTagBullet())
-    ServiceLocator.sounds_service.play(bullet_info["sound"])
+    #########____________________###########
+    #ServiceLocator.sounds_service.play(bullet_info["sound"])
 
 
 def create_explosion(world: esper.World, pos: pygame.Vector2, explosion_info: dict):
@@ -129,5 +139,42 @@ def create_explosion(world: esper.World, pos: pygame.Vector2, explosion_info: di
     world.add_component(explosion_entity, CTagExplosion())
     world.add_component(explosion_entity,
                         CAnimation(explosion_info["animations"]))
-    ServiceLocator.sounds_service.play(explosion_info["sound"])
+    #########____________________###########
+    #ServiceLocator.sounds_service.play(explosion_info["sound"])
     return explosion_entity
+
+
+def create_screen_message(screen:pygame.Surface, text_info:dict):
+    title_text =  ServiceLocator.fonts_services.get_title(text_info["font"],
+                                                        text_info["size"])
+    title_surface= title_text.render(text_info["text"],
+                                         True,
+                                         (text_info["color"]["r"],
+                                          text_info["color"]["g"],
+                                          text_info["color"]["b"]) )
+
+    screen.blit(title_surface, (text_info["pos"]["x"],text_info["pos"]["y"]))
+
+def create_special(world: esper.World,
+                  player_pos: pygame.Vector2,
+                  player_size: pygame.Vector2,
+                  shield_info: dict):
+    bullet_surface = ServiceLocator.images_services.get(shield_info["image"])
+   
+    size = bullet_surface.get_size()
+    size = (size[0] / shield_info["animations"]["number_frames"], size[1])
+    
+    pos = pygame.Vector2(player_pos.x + (player_size[0] / 2) - (size[0] / 2),
+                         player_pos.y + (player_size[1] / 2) - (size[1] / 2)) 
+   
+    vel = pygame.Vector2(0,0)
+
+    shield_entity = create_sprite(world, pos, vel, bullet_surface)
+    world.add_component(shield_entity,
+                        CAnimation(shield_info["animations"]))
+    world.add_component(shield_entity, CTagSpecial())
+    
+
+    
+    
+
