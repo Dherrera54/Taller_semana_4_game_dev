@@ -35,6 +35,7 @@
         },
         "mine_frag":{
             "image": "assets/img/bullet_special.png",
+            "sound":"assets/snd/laser_special.ogg",
             "vel":150
         }
         

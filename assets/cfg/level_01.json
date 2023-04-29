@@ -5,7 +5,8 @@
             "y": 180
         },
         "max_bullets": 4,
-        "max_grenades": 2
+        "max_grenades": 2,
+        "reload_time":10
 
     },
     "enemy_spawn_events": [
@@ -111,7 +112,7 @@
         "title":{
             "text":"Ejercicio 04",
             "font":"assets/fnt/PressStart2P.ttf",
-            "size":16,
+            "size":14,
             "color":{
                 "r":255,
                 "g":255,
@@ -123,8 +124,8 @@
             }
 
         },
-        "controls":{
-            "text": "Controles: flechas para movimiento y click para disparar",
+        "info_text":{
+            "text": "pulsa P para pausar y obtener información",
             "font":"assets/fnt/PressStart2P2.ttf",
             "size":8,
             "color":{
@@ -135,6 +136,48 @@
             "pos":{
                 "x":25,
                 "y":50
+            }
+        },
+        "controls_mov":{
+            "text": "Movimiento: usar flechas para movimiento",
+            "font":"assets/fnt/PressStart2P2.ttf",
+            "size":8,
+            "color":{
+                "r":255,
+                "g":255,
+                "b":255
+            },
+            "pos":{
+                "x":100,
+                "y":150
+            }
+        },
+        "controls_fire":{
+            "text": "Disparar: click izquierdo para disparar",
+            "font":"assets/fnt/PressStart2P2.ttf",
+            "size":8,
+            "color":{
+                "r":255,
+                "g":255,
+                "b":255
+            },
+            "pos":{
+                "x":100,
+                "y":175
+            }
+        },
+        "controls_spec":{
+            "text": "Disparar: click derecho para especial",
+            "font":"assets/fnt/PressStart2P2.ttf",
+            "size":8,
+            "color":{
+                "r":255,
+                "g":255,
+                "b":255
+            },
+            "pos":{
+                "x":100,
+                "y":200
             }
         },
         
@@ -148,12 +191,12 @@
                 "b":0
             },
             "pos":{
-                "x":100,
-                "y":100
+                "x":75,
+                "y":75
             }
         },
         "paused_msg":{
-            "text": "pulsa P para continuar",
+            "text": "Pulsa P para continuar",
             "font":"assets/fnt/PressStart2P2.ttf",
             "size":8,
             "color":{
@@ -180,7 +223,7 @@
                 "y":125
             }
         }
-        
+     
         
         
     }

@@ -15,4 +15,4 @@ def system_rendering(world:esper.World, screen:pygame.Surface, level_text_info:d
     for _, (c_t, c_s) in components:
         screen.blit(c_s.surf, c_t.pos, area=c_s.area)
         create_screen_message(screen, level_text_info["title"])
-        create_screen_message(screen, level_text_info["controls"])
+        create_screen_message(screen, level_text_info["info_text"])

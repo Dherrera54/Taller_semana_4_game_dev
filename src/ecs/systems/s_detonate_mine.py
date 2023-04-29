@@ -12,17 +12,14 @@ def system_detonate_mine(world: esper.World,
 
     components = world.get_components(CTagSpecial)
 
-
-    angles=(math.radians(0),math.radians(45),math.radians(90),math.radians(135),
-                math.radians(180),math.radians(225),math.radians(270),math.radians(315))
     
     for special_entity, c_spec in components:
             c_spec[0].create_time += delta_time
             if c_spec[0].special_type=="mine" and c_spec[0].create_time>=2.5 and c_spec[0].detonated==False:
                     
-                    for angle in angles:
-                        vel_x = math.cos(angle)*mine_info["vel"]
-                        vel_y = math.sin(angle)*mine_info["vel"]
+                    for i in range(8):
+                        vel_x = math.cos(math.radians(45*i))*mine_info["vel"]
+                        vel_y = math.sin(math.radians(45*i))*mine_info["vel"]
                         vel = pygame.Vector2(vel_x, vel_y)
                         create_mine_frag(world,c_spec[0].pos,player_size,vel,mine_info)
 

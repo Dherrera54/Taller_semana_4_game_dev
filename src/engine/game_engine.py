@@ -1,3 +1,4 @@
+from src.create.prefab_creator import create_screen_message
 from src.ecs.systems.s_mine_reloader import system_mine_reloader
 from src.ecs.systems.s_detonate_mine import system_detonate_mine
 from src.ecs.systems.s_collision_enemy_special import system_collision_enemy_special
@@ -47,6 +48,8 @@ class GameEngine:
         self.is_running = False
         self.framerate = self.window_cfg["framerate"]
         self.delta_time = 0
+        self.reload_time =0.0
+        self.reloading= False
         self.paused = False
         self.bg_color = pygame.Color(self.window_cfg["bg_color"]["r"],
                                      self.window_cfg["bg_color"]["g"],
@@ -107,8 +110,9 @@ class GameEngine:
         system_enemy_spawner(self.ecs_world, self.enemies_cfg, self.delta_time)
         system_detonate_mine(self.ecs_world,self._player_c_s.area.size, self.player_cfg["special"]["mine_frag"], 
                                 self.delta_time, self.explosion_cfg)
-        self.num_mines = system_mine_reloader(self.ecs_world, self.screen, self.num_mines, self.delta_time,
-                                self.level_01_cfg["player_spawn"]["max_grenades"], self.level_01_cfg["level_text"]["generic_msg"] )
+        self.num_mines = system_mine_reloader(self.ecs_world, self.num_mines, self.delta_time,
+                                self.level_01_cfg["player_spawn"]["max_grenades"], self.level_01_cfg["player_spawn"]["reload_time"])
+        
         system_movement(self.ecs_world, self.delta_time)
 
         system_screen_bounce(self.ecs_world, self.screen)
@@ -133,6 +137,7 @@ class GameEngine:
     def _draw(self):
         self.screen.fill(self.bg_color)
         system_rendering(self.ecs_world, self.screen, self.level_01_cfg["level_text"])
+        self._display_ammo(self.level_01_cfg["level_text"]["generic_msg"])
         pygame.display.flip()
 
     def _clean(self):
@@ -170,6 +175,49 @@ class GameEngine:
         if c_input.name == "PLAYER_SPECIAL" and self.num_mines < self.level_01_cfg["player_spawn"]["max_grenades"]:
             self.num_mines = create_mine(self.ecs_world, self._player_c_t.pos,
                           self._player_c_s.area.size, self.player_cfg["special"]["mine"], self.num_mines )
+
+    def _display_ammo(self, mesg_info):
+        mines = self.level_01_cfg["player_spawn"]["max_grenades"]-self.num_mines
+        msg_1={
+            "text": "minas: "+ str(mines),
+            "font":mesg_info["font"],
+            "size":mesg_info["size"],
+            "color":mesg_info["color"],
+            "pos":{
+                "x":25,
+                "y":self.window_cfg["size"]["h"]-25
+            }
+        }
+
+        create_screen_message(self.screen, msg_1)
+        
+        if mines>0 and not self.reloading:
+            self.reload_time =0.0
+
+        if mines <=0:
+            self.reloading= True
+            self.reload_time+=self.delta_time
+            time_per= (self.reload_time/self.level_01_cfg["player_spawn"]["reload_time"])
+            msg_2={
+            "text": "recargando: "+ str(int(time_per*100))+ "%",
+            "font":mesg_info["font"],
+            "size":mesg_info["size"],
+            "color":{
+                "r":255-(255*time_per),
+                "g":0+(255*time_per),
+                "b":0
+            },
+            "pos":{
+                "x":25,
+                "y":self.window_cfg["size"]["h"]-35
+            }
+            }
+            create_screen_message(self.screen, msg_2)
+            if self.reload_time >=self.level_01_cfg["player_spawn"]["reload_time"]:
+                self.reloading=False
+
+        
+
             
 
 

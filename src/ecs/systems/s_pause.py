@@ -13,6 +13,9 @@ def system_pause( pause_text_info:dict, screen:pygame.Surface):
         screen.fill(pygame.Color(0,0,0))
         create_screen_message(screen, pause_text_info["paused"])
         create_screen_message(screen, pause_text_info["paused_msg"])
+        create_screen_message(screen, pause_text_info["controls_mov"])
+        create_screen_message(screen, pause_text_info["controls_fire"])
+        create_screen_message(screen, pause_text_info["controls_spec"])
 
         for event in pygame.event.get():
 
