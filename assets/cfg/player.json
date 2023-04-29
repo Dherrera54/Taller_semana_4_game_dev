@@ -21,6 +21,7 @@
     "special":{
         "mine":{
             "image": "assets/img/shield.png",
+            "sound":"assets/snd/laser_special.ogg",
             "animations": {
             "number_frames": 4,
             "list": [
@@ -36,7 +37,8 @@
         "mine_frag":{
             "image": "assets/img/bullet_special.png",
             "sound":"assets/snd/laser_special.ogg",
-            "vel":150
+            "vel":150,
+            "detonation_time":1.5
         }
         
     }

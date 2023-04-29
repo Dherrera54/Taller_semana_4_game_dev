@@ -176,6 +176,7 @@ def create_mine(world: esper.World,
                         CAnimation(mine_info["animations"]))
     world.add_component(shield_entity, CTagSpecial("mine", pos))
     num_mines+=1
+    ServiceLocator.sounds_service.play(mine_info["sound"])
     return num_mines
 
 
@@ -191,7 +192,7 @@ def create_mine_frag(world: esper.World,
 
     bullet_entity = create_sprite(world, pos, vel, frag_surface)
     world.add_component(bullet_entity, CTagSpecial("mine_frag",mine_pos ))
-    ServiceLocator.sounds_service.play(frag_info["sound"])
+    
 
 def create_mine_reloader(world: esper.World):
     reloader_entity = world.create_entity()

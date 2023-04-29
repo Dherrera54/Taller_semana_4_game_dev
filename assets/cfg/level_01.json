@@ -6,7 +6,7 @@
         },
         "max_bullets": 4,
         "max_grenades": 2,
-        "reload_time":10
+        "reload_time":5
 
     },
     "enemy_spawn_events": [
