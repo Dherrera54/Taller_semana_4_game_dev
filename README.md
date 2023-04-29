@@ -19,4 +19,4 @@ python3 main.py
 
 ## Itch.io
 
-(https://dherrerag.itch.io/taller-semana-4)[Link a juego web en Itch.io]
+https://dherrerag.itch.io/taller-semana-4
